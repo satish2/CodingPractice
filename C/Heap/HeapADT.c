@@ -10,13 +10,15 @@ typedef struct _heap{
 	int heap_type; //1 - MAX_HEAP 0-MIN_HEAP
 }heap;
 
-void printInputArray(int *,int);
-int build_heap(int *array, heap *hp, int n);
-void percolateDown(int nodeIndex,heap *hp);
+void printInputArray(int *arr,int arrLen);
+int build_heap(int *array, heap *hp, int array_size);
+void heapify(int nodeIndex,heap *hp);
 int getParentIndex(int i, heap *hp);
 int getLeftChildIndex(int i, heap *hp);
 int getRightChildIndex(int i, heap *hp);
 void heapsort(heap *h);
+void DeleteElement(heap *hp, int val);
+void printLeaves(heap *h);
 
 void printInputArray(int *array,int capacity){
 	int i;
@@ -44,7 +46,7 @@ int build_heap(int *array, heap *h, int n){
 	}
 	h->length = i;
 	for(i=(h->length-1)/2-1;i>=0;i--){
-		percolateDown(i,h);
+		heapify(i,h);
 	}
 		
 		
@@ -54,7 +56,7 @@ int build_heap(int *array, heap *h, int n){
  * It goes down from nodeIndex swapping current node with max of its childNode
  * 
 */
-void percolateDown(int nodeIndex,heap *hp){
+void heapify(int nodeIndex,heap *hp){
 //	printf("percolating at = %2d : ",nodeIndex);
 	int lChild = getLeftChildIndex(nodeIndex,hp);
 	int rChild = getRightChildIndex(nodeIndex,hp);
@@ -71,7 +73,7 @@ void percolateDown(int nodeIndex,heap *hp){
 		hp->arr[max] = hp->arr[curr];
 		hp->arr[curr] = temp;
 //		printInputArray(hp->arr,hp->length);	
-		percolateDown(max,hp);
+		heapify(max,hp);
 	}
 }	
 
@@ -118,11 +120,41 @@ void heapsort(heap *h){
 		h->arr[0] = temp;
 
 		h->length--;
-		percolateDown(0, h);
+		heapify(0, h);
 //		printf("h->length = %2d: ",h->length);
 //		printInputArray(h->arr,h->length);
 	}
 	h->length = old_len;
+}
+
+void printLeaves(heap *hp){
+	int lastParent = ((hp->length-1)-1)/2;
+	int i = lastParent+1;
+	for(;i<hp->length;i++)
+		printf("%d ",hp->arr[i]);
+	printf("\n");
+	return;
+}
+
+void DeleteElement(heap *hp, int val){
+	//Level Order Traversal
+	int length = hp->length;
+	int i;
+	for(i=0;i<length;i++){
+		if(hp->arr[i] == val){
+			int temp = hp->arr[length-1];
+			hp->arr[length-1] = hp->arr[i];
+			hp->arr[i] = temp;
+			//At hp->length-1 is the element that is not needed.
+			hp->length--;
+			break;
+		}
+	}
+	int j = i;
+	for(;j>=0;){
+		heapify(j,hp);
+		j = getParentIndex(j,hp);
+	}
 }
 
 int main(int argc, char *argv[]){
@@ -145,11 +177,18 @@ int main(int argc, char *argv[]){
 		i++;
 	}
 	build_heap(inp_arr,myheap,inp_arr_len);
-	printf("Heap : ");
+	printf("%-11s : ","Heap");
+	printInputArray(myheap->arr,myheap->length);
+	
+	printf("%-11s : ","Leaves");
+	printLeaves(myheap);
+
+	DeleteElement(myheap,10);
+	printf("%-11s : ","Deleted 10");
 	printInputArray(myheap->arr,myheap->length);
 
 	heapsort(myheap);
-	printf("Sort : ");
+	printf("%-11s : ","Sorted");
 	printInputArray(myheap->arr,myheap->length);
 
 	free(myheap);
