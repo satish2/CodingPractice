@@ -16,7 +16,7 @@ void build_heap(PQ *p, int *array){
 	return;
 }
 
-int getParentIndex(PQ *p, int i){
+int getParentIndex(PQ *p, int i){	
 	if(i<=0 || i>=p->len){
 		return -1;
 	}
