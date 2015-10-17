@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "binarytree.h"
 
 #define JUSTINTRO printf("Takes an array with values 1,2,3,4,5 and initial tree with just root (0),\nprints \
 preorder, postorder, inorder and levelorder traversals \n ******************\n");
@@ -9,6 +8,12 @@ preorder, postorder, inorder and levelorder traversals \n ******************\n")
 #define PREORDER printf("%-15s:","preorder");
 #define POSTORDER printf("%-15s:","postorder");
 #define LEVELORDER printf("%-15s:","levelorder");
+
+typedef struct _tree {
+	int val;	
+	struct _tree *left;
+	struct _tree *right;
+}tree;
 
 typedef struct _Node {
 	tree *treeNode;
@@ -126,7 +131,45 @@ void DeleteTree(tree *t){
 	return;
 }
 
+/*typedef struct _Node {
+	tree *val;
+	struct _Node *prev;
+}Node;
 
+typedef struct _Stack {
+	Node *top;
+	int length;
+}Stack;
+
+int push(Stack *st, tree *t){
+	Node *n = (Node *)malloc(sizeof(Node));
+	if(n == NULL){
+		return -1;
+	}
+	n->val = t;
+	n->prev = NULL;
+	if(st->length == 0){
+		st->top = n;
+		st->length++;
+		return 0;
+	}
+	n->prev = st->top;
+	st->top = n;
+	st->length++;
+	return 0;
+}
+
+tree *pop(Stack *st){
+	if(st->length == 0){
+		return NULL;
+	}
+	tree *ret = st->top->val;
+	Node *temp = st->top;
+	st->top = st->top->prev;
+	free(temp);
+	st->length--;
+	return ret;
+}*/
 
 void BuildTree(tree *tr, int *arr, int i, int N){
 	//1 .Tree specifically does not have any rule. Can insert value at any place
@@ -171,18 +214,15 @@ int main(int argc, char *argv[]){
 	JUSTINTRO
 
 	PREORDER
-//	preOrder(tr);
-	preorder_nonrecursive(tr);
+	preOrder(tr);
 	printf("\n");
 
 	POSTORDER
 	postOrder(tr);
-//	postorder_nonrecursive(tr);
 	printf("\n");
 
 	INORDER
-//	inOrder(tr);
-	inorder_nonrecursive(tr);
+	inOrder(tr);
 	printf("\n");
 
 	LEVELORDER
