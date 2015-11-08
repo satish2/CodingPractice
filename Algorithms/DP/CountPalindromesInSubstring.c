@@ -48,9 +48,9 @@ int find_nop(char *str, int st, int end){
  			mat[i][j] = 0;
  	}
  }
- for(len = 1; len < max_length; len++){
+ for(len = 2; len < max_length; len++){
  	for(i=max_length-len-1;i>=0;i--){
- 		for(j = i+len; (j-i) <= len && j<max_length;j++){
+ 		for(j = i+len-1; (j-i) <= len && j<max_length;j++){
  			//printf("i=%d,j=%d\n",i,j);
  			if(str[i] == str[j]){
  				if(i <= j-2 && mat[i+1][j-1] == 1 ){
