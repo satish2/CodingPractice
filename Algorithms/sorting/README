@@ -1,0 +1,3 @@
+Compile Command:
+
+gcc -o test sorting.c -lm
